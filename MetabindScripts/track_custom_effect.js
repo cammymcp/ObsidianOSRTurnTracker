@@ -61,7 +61,7 @@
     } else {
         /* new marker */
         if (/%%\s*%%/.test(targetLine)) {
-            targetLine = targetLine.replace(/(%%\s*%%)(\s*)$/, (_, p1, p2) =>
+            targetLine = targetLine.replace(/(%%\s*%%)(\s*)/, (_, p1, p2) =>
                 `${p1} **${label}**${p2}`);
         } else {
             targetLine = targetLine.replace(/^(\s*>?\s*-\s*\[[ xX]\]\s*)/, (_, p1) =>

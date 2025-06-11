@@ -69,11 +69,11 @@
         targetLine = targetLine.replace(markerRE, `**${letter}${next}**`);
     } else {
         /* insert new marker */
-        if (/%%\s*%%/.test(targetLine)) {           // after placeholder
-            targetLine = targetLine.replace(/(%%\s*%%)(\s*)$/, (_, p1, p2) => `${p1} **${letter}**${p2}`);
-        } else {                                   // after checkbox
-            targetLine = targetLine.replace(/^(\s*>?\s*-\s*\[[ xX]\]\s*)/, (_, p1) => `${p1}**${letter}** `);
-        }
+    if (/%%\s*%%/.test(targetLine)) {           // after placeholder
+        targetLine = targetLine.replace(/(%%\s*%%)(\s*)/, (_, p1, p2) => `${p1} **${letter}**${p2}`);
+    } else {                                   // after checkbox
+        targetLine = targetLine.replace(/^(\s*>?\s*-\s*\[[ xX]\]\s*)/, (_, p1) => `${p1}**${letter}** `);
+    }
     }
 
     lines[targetIdx] = targetLine;

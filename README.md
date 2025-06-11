@@ -48,4 +48,3 @@ The button in `Demo Session Note` can be added to any note with a valid `startTi
 ## Known Issues
 
 - Too many labels on a single row (or labels that are too long) can break the formatting when the row gets too wide to render.
-- Effects and light sources with the same label can be "stacked" to expire on the same turn (e.g. `L` becomes `L2` if two lanterns are lit at the same time.) However, two effect labels of **different types** cannot currently be set to expire at the same time.
