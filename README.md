@@ -1,6 +1,6 @@
 A simple OSR dungeon turn tracker for Obsidian.md, building on the `!checks` callout in ITS theme. 
 
-![demo-gif](https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMDhxdHV4aW12bTl5Y3FqdGV4b3FpaHA1YWJ2dmk5bjJuNGE4cXJzcCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/uOqxCg1IBJoAklxt7A/giphy.gif)
+![demo-gif](https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExd2NjMjdvd2s2MGdtaXNtb2Z5d2hsOWh1MXJiOHJvZ2gxbm5odWVobCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/eCZDr7sTh5hf52FB6K/giphy.gif)
 
 ## Features
 

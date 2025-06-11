@@ -15,7 +15,7 @@ module.exports = async function (tp) {
     /* ───── helpers ───── */
     const pad = n => String(n).padStart(2, "0");
     const box = c => `>\t - [${c ? "x" : " "}] %% %%`;
-    const hourL = h => `>\t - .** ${pad(h)}:00 **.`;
+    const hourL = h => `>\t - \`${pad(h)}:00\`&nbsp;`;
     const title = d => d.toLocaleDateString("en-GB",
         { weekday: "long", year: "numeric", month: "long", day: "numeric" });
 
@@ -54,7 +54,11 @@ module.exports = async function (tp) {
         lines.push(hourL(h));
         for (let t = 0; t < 6; t++) {
             const checked = (hIdx === 0 && t < tickedFirst);
-            lines.push(box(checked));
+            let line = box(checked);
+
+            // Add a non-breaking space comment or character to the last checkbox
+            if (t === 5) line += "\u00A0";  // Unicode NBSP
+            lines.push(line);
         }
 
         /* advance one hour */

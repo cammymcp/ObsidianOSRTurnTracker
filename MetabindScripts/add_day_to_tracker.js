@@ -9,7 +9,7 @@
 
     /* -- render helpers -- */
     const pad = n => String(n).padStart(2, "0");
-    const hourL = h => `>\t - .** ${pad(h)}:00 **.`;
+    const hourL = h => `>\t - \`${pad(h)}:00\`&nbsp;`;
     const box = `>\t - [ ] %% %%`;
     const title = d => d.toLocaleDateString("en-GB",
         {
@@ -19,7 +19,7 @@
 
     /* -- regexes -- */
     const headerRE = /^\s*>\s*\[!checks\|collapse]\s+(.+)$/;
-    const hourLineRE = /^\s*>\s*-\s*\.\*\*\s*(\d{2}):00\s*\*\*\./;
+    const hourLineRE = /^\s*>\s*-\s*`(\d{2}):00`\s*&nbsp;/;
     const trackerLineRE = /^\s*>\s*-\s*(?:\[[ xX]\]\s*%%\s*%%|\.\*\* \d{2}:00 \*\*\.)/;
 
     /* -- scan to find the LAST hour header -------------------- */
@@ -81,7 +81,13 @@
         fourChunk++;
 
         extra.push(hourL(h));
-        for (let t = 0; t < 6; t++) extra.push(box);
+        for (let t = 0; t < 6; t++) {
+            let newBox = box;
+
+            // Add a non-breaking space comment or character to the last checkbox
+            if (t === 5) newBox += "\u00A0";  // Unicode NBSP
+            extra.push(newBox);
+        }
 
         cur.setHours(h + 1);
     }
