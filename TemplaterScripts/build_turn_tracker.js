@@ -1,23 +1,71 @@
 /**********************************************************************
- * build_turn_tracker.js – Templater helper
- * Builds a 24-hour turn tracker that **breaks into a new call-out at 00:00**.
+ * build_turn_tracker.js – Templater user script
+ * Builds a 24-hour turn tracker that breaks into a new call-out at 00:00.
  * The first call-out starts in the hour containing the ISO time stored in
- * front-matter key  startTime:
+ * front-matter key startTime; headers include weekday, day, month, and year.
+ * If no frontmatter is provided, tracker starts at 8am
  **********************************************************************/
 
+/**
+ * @param {object} tp  Templater API
+ *
+ * Reads optional `fc-calendar` and `startTime` from frontmatter.
+ */
 module.exports = async function (tp) {
-    /* ───── input ───── */
-    const iso = tp.frontmatter["startTime"];
-    if (!iso) throw new Notice("Error: startTime property missing");
-    const start = new Date(iso);
-    if (isNaN(start)) throw new Notice("Error: startTime is not valid ISO");
+    /* ───── frontmatter & defaults ───── */
+    const fm = tp.frontmatter;
+    const calendarName = fm["fc-calendar"];
+    const hasCal = calendarName && typeof Calendarium !== "undefined";
+    let calApi, store, firstWeekDay, weekdays, months;
+    if (hasCal) {
+        calApi = Calendarium.getAPI(calendarName);
+        const calendarObj = calApi.getObject();
+        store = calApi.getStore();
+        ({ firstWeekDay, weekdays, months } = calendarObj.static);
+    }
 
-    /* ───── helpers ───── */
+    const iso = fm.startTime;
+    let start;
+    if (iso && !isNaN(start = new Date(iso))) {
+        // use provided startTime
+    } else if (hasCal) {
+        // use calendar's current date at 08:00
+        const cd = calApi.getCurrentDate();
+        start = new Date(cd.year, cd.month, cd.day, 8, 0, 0, 0);
+    } else {
+        // default to Day 1 at 08:00
+        start = new Date(0);
+        start.setHours(8, 0, 0, 0);
+    }
+
+    /* ───── helpers & title ───── */
     const pad = n => String(n).padStart(2, "0");
     const box = c => `>\t - [${c ? "x" : " "}] %% %%`;
     const hourL = h => `>\t - \`${pad(h)}:00\`&nbsp;`;
-    const title = d => d.toLocaleDateString("en-GB",
-        { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+    const ordinal = n => { const s = ['th','st','nd','rd'], v = n % 100; return s[(v-20)%10]||s[v]||s[0]; };
+    const formatReal = d => {
+        const weekday = d.toLocaleDateString(undefined, { weekday: 'long' });
+        const month = d.toLocaleDateString(undefined, { month: 'long' });
+        const day = d.getDate(), year = d.getFullYear();
+        return `${weekday} ${day}${ordinal(day)} ${month} ${year}`;
+    };
+    let defaultDay = 1;
+    const title = d => {
+        if (hasCal) {
+            const cd = calApi.getDate(d.getDate(), d.getMonth(), d.getFullYear());
+            const daysBefore = store.getDaysBeforeDate(cd);
+            const idx = (firstWeekDay + daysBefore) % weekdays.length;
+            const entry = weekdays[idx];
+            const weekdayName = typeof entry === 'string' ? entry : entry.name;
+            const monthEntry = months[cd.month];
+            const monthName = typeof monthEntry === 'string' ? monthEntry : monthEntry.name;
+            return `${weekdayName}, ${cd.day} ${monthName} ${cd.year}`;
+        } else if (fm.startTime) {
+            return formatReal(d);
+        } else {
+            return `Day ${defaultDay++}`;
+        }
+    };
 
     /* how many 10-min slots in the first hour have already passed? */
     const tickedFirst = Math.floor(start.getMinutes() / 10);   // 0-5

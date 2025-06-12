@@ -11,6 +11,7 @@ A simple OSR dungeon turn tracker for Obsidian.md, building on the `!checks` cal
 - Light and custom effects "expire" (turn from bold to italics) when the tracker reaches them;
 - Effects of the same type which expire on the same turn are "stacked". E.g. lighting a second torch on the same turn will update the expiry label from `T` to `T2`.
 - Ability to add days to the tracker if needed.
+- Displays custom weekday and month names when used with Calendarium plugin.
 
 ## Disclaimer
 
@@ -26,7 +27,8 @@ The turn tracker leverages popular community plugins and themes for its function
 	- Make sure `User Scripts/Script files folder location` is set to a different folder in your vault.
 - **Meta-Bind** - *required for buttons and input fields*
 	- JavaScript must be enabled in Settings
-- **JS Engine** - *required for running JavaScript from Meta-Bind buttons*
+	- **JS Engine** - *required for running JavaScript from Meta-Bind buttons*
+- (Optional) **Calendarium** – *optional for adding custom calendar formatting via the Calendarium API*. The turn tracker will display your fantasy weekday, day number, and month names instead of real-world dates.
 
 ## Setup
 
@@ -43,8 +45,14 @@ The turn tracker leverages popular community plugins and themes for its function
 
 ## General Usage
 
-The button in `Demo Session Note` can be added to any note with a valid `startTime` frontmatter property. 
+Add the button from `Demo Session Note` to any note. The tracker's behaviour depends on the frontmatter in that note:
 
+| Frontmatter                    | Behaviour                                                      | Header Format                                  |
+| ------------------------------ | -------------------------------------------------------------- | ---------------------------------------------- |
+| None                           | Starts at **Day 1**, 8am                                       | `Day N`                                        |
+| `startTime (Date & Time)` only | Starts at the given date and time                              | Real date (e.g. `Saturday 21st May 2016`)      |
+| `fc-calendar (String)` only    | Starts at Calendarium calendars "today" date, 8am              | Fantasy date (e.g. `Fireday, 22 Growfest 591`) |
+| `startTime` and `fc-calendar`  | Starts at the given date and time in the Calendarium calendar. | Fantasy date (e.g `Fireday, 22 Growfest 591`)  |
 ## Known Issues
 
 - Too many labels on a single row (or labels that are too long) can break the formatting when the row gets too wide to render.

@@ -1,10 +1,14 @@
 ---
-startTime: 2016-05-21T16:52:00
+fc-calendar: Calendar of Greyhawk
 ---
-Set a start time in the frontmatter properties above, then click the button to build the turn tracker.
+Add the `Build Turn Tracker` button to any note. Depending on the frontmatter properties of that note, the tracker will behave slightly differently. See table for details.
 
-You can add this button to any note with a `startTime` frontmatter property.
-
+| Frontmatter                    | Behaviour                                                      | Header Format                                  |
+| ------------------------------ | -------------------------------------------------------------- | ---------------------------------------------- |
+| None                           | Starts at **Day 1**, 8am                                       | `Day N`                                        |
+| `startTime (Date & Time)` only | Starts at the given date and time                              | Real date (e.g. `Saturday 21st May 2016`)      |
+| `fc-calendar (String)` only    | Starts at Calendarium calendars "today" date, 8am              | Fantasy date (e.g. `Fireday, 22 Growfest 591`) |
+| `startTime` and `fc-calendar`  | Starts at the given date and time in the Calendarium calendar. | Fantasy date (e.g `Fireday, 22 Growfest 591`)  |
 ### Turn Tracker
 
 ```meta-bind-button
